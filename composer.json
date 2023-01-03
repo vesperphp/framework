@@ -1,0 +1,19 @@
+{
+  "name": "vesperphp/framework",
+  "type": "library",
+  "description": "The Vesper framework library. This contains all the classes.",
+  "keywords": ["framework", "php", "library"],
+  "license": "MIT",
+  
+   "authors": [
+      {
+          "name": "Rik Janssen",
+          "email": "rik@vesperphp.com"
+      }
+  ],
+  
+  "require": {
+
+  }
+  
+}
