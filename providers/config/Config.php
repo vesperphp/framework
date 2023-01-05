@@ -12,6 +12,10 @@ class Config{
 
         $sess = Session::get("system/config");
 
+        if(empty($sess)){
+            $sess = Config::load();
+        }
+
         if(isset($sess[$key])){
 
             return $sess[$key];
@@ -47,34 +51,14 @@ class Config{
         }
         // Store in session
         Session::set("system/config", $store);
+        return $store;
 
 
     }
 
     public static function dev(){
 
-        $conf = ROOTPATH."/.conf"; // - note: change to Keep::
-        $contents = file($conf);
-
-        $store = [];
-        foreach($contents as $value){
-
-            $value = str_replace(': ', ':', $value);
-            $explode = explode(":", $value);
-
-            if(
-                substr($value,0,1)!='#' 
-                && $value!="" 
-                && $value!=" "
-                && isset($explode[0])
-                && isset($explode[1])
-            ){ 
-                
-                
-                $store[$explode[0]] = str_replace("\n","",$explode[1]);
-            }
-            
-        }
+        $store = Config::load();
 
         if($store["system/state"]=="development"){ return true; }; 
 

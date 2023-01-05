@@ -60,6 +60,8 @@ class Make{
 
         if(isset($flags[0])){
             
+
+
             Pattern::create("table", $flags[0]);
             echo "\n\e[33mTable template\e[33m created!\n\n";
 

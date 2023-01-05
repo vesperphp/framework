@@ -1,0 +1,101 @@
+<?php
+
+namespace Framework;
+
+use Sequel\Sequel;
+
+/**
+ * This is a CLI
+ * command. db:(method)
+ */
+
+class Db{
+
+    public function build(array $flags = []){
+
+    
+        /**
+         * The CLI helper to build
+         * the database based on the
+         * input from Init/tables and
+         * system's Tablier/tables.
+         */
+
+        echo "\e[32mTablier creating tables...\n";
+
+        foreach ( glob(ROOTPATH."/patterns/sequel/*.php") as $filename) { 
+            include $filename; 
+        }
+
+        echo "\n\e[32mDone.";
+
+    }
+
+    public function destroy(array $flags = []){
+
+        echo "\e[32mTablier dropping tables...\n";
+
+        /** 
+         * Run an SQL command
+         * to drop all tables
+         * within this DB.
+         */
+
+        $res = Sequel::sql("SHOW TABLES;");
+
+        $sql = "SET FOREIGN_KEY_CHECKS = 0;
+        SET GROUP_CONCAT_MAX_LEN=32768;
+        SET @tables = NULL;
+        SELECT GROUP_CONCAT('`', table_name, '`') INTO @tables
+        FROM information_schema.tables
+        WHERE table_schema = (SELECT DATABASE());
+        SELECT IFNULL(@tables,'dummy') INTO @tables;
+        SET @tables = CONCAT('DROP TABLE IF EXISTS ', @tables);
+        PREPARE stmt FROM @tables;
+        EXECUTE stmt;
+        DEALLOCATE PREPARE stmt;
+        SET FOREIGN_KEY_CHECKS = 1;";
+
+        Sequel::sql($sql);
+
+        foreach($res['all'] as $table){
+            echo "\e[39m".$table['Tables_in_test']." \e[31mdeleted!\e[39m \n";
+        }
+
+        echo "\e[32mDone.";
+        
+    }
+
+    public function fill(array $flags = []){
+
+        /**
+         * The CLI helper to build
+         * the database based on the
+         * input from Init/tables and
+         * system's Tablier/tables.
+         */
+
+        echo "\e[32mTablier filling tables...\n";
+
+        /**
+         * Run the init/tables
+         */
+
+        foreach ( glob(ROOTPATH."/patterns/filler/*.php") as $filename) { 
+            include $filename; 
+        }
+
+        echo "\n\e[32mDone.";
+        
+    }
+
+    public function refresh(array $flags = []){
+
+        $this->destroy();
+        $this->build();
+        $this->fill();
+        
+    }
+
+
+}

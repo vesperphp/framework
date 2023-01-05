@@ -23,7 +23,7 @@ class Vesper{
          * 
          */
 
-        Config::load(); // Load the config file
+         Config::load(); // Load the config file
 
     }
 
