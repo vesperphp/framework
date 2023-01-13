@@ -33,8 +33,8 @@ class Config{
         $store = [];
         foreach($contents as $value){
 
-            $value = str_replace(': ', ':', $value);
-            $explode = explode(":", $value);
+            //$value = str_replace(': ', ':|:', $value);
+            $explode = explode(": ", $value);
 
             if(
                 substr($value,0,1)!='#' 
@@ -56,13 +56,12 @@ class Config{
 
     }
 
-    public static function dev(){
+    public static function dev($arg = ['development', 'build']){
 
         $store = Config::load();
 
-        if($store["system/state"]=="development"){ return true; }; 
-
-        
+        if(in_array($store["system/state"],$arg)){ return true; }
+       
         return false;
 
     }

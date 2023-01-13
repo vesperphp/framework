@@ -3,6 +3,8 @@
 namespace Framework;
 
 use Keep\Keep;
+use Route\Route;
+use Route\Armour;
 use Config\Config;
 use Framework\Cli;
 use service\Session;
@@ -24,6 +26,10 @@ class Vesper{
          */
 
          Config::load(); // Load the config file
+         
+         SystemRoutes::registerOnRoot(); // register system based routes
+
+         Route::load();
 
     }
 
@@ -40,7 +46,12 @@ class Vesper{
          /**
           * Playground!
           */
-
+/*
+          $t = new Test;
+          $t->pass('1');*/
+          
+          $a = new Armour;
+          $a->call("Test", "pass",['1','2']);
         
     }
 
@@ -52,11 +63,15 @@ class Vesper{
          * 
          */
 
+ 
+
         if(Config::dev()){   
-            echo "<pre>";  
+            echo "<pre>Tailgate:";  
             var_dump( Keep::tailgate() );
-            echo "</pre>";
+            echo "</pre>:end;";
         }
+
+        // wipe system/session
         
     }
 

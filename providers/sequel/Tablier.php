@@ -73,6 +73,52 @@ class Tablier extends Columns{
     }
 
     /**
+     * Drop this table.
+     */
+
+    public function drop(){
+
+        /**
+         * Check if the table
+         * exists, if so; return
+         * a message.
+         */
+
+        if(Tablier::exists($this->table)){
+
+            /**
+             * The create table
+             * master template.
+             */
+
+            $this->template = "DROP TABLE IF EXISTS `{%tablename%}` CASCADE;";
+
+            /**
+             * Build and run the 
+             * SQL query.
+             */
+
+            $sql = new Construct($this);
+            Sequel::sql($sql->build());
+
+            /**
+             * Show a message for
+             * use in Foundry.
+             */
+
+            echo "\e[39mTablier has \e[32msuccessfully\e[39m dropped the `".$this->table."` table.\e[39m\n";
+
+            $this->sysEntry();
+
+        }else{
+
+            echo "\e[39mTablier \e[31mhas not ran\e[39m because table `".$this->table."` was not available to destroy.\e[39m\n";
+            
+        }
+  
+    }
+
+    /**
      * Record the table being 
      * created in the sys table
      */
@@ -80,7 +126,7 @@ class Tablier extends Columns{
      public function sysEntry(){
 
         $name = $this->table;
-        //Sequel::insert('_sys_tables')->set("name", $name)->do();
+        Sequel::insert('_tables')->set("name", $name)->do();
 
      }
 

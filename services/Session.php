@@ -18,6 +18,12 @@ class Session{
 
     }
 
+    public static function drop(string $key){
+
+        unset( $_SESSION[$key] );
+
+    }
+
     public static function tree(){
         
         return $_SESSION;
