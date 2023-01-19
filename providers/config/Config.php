@@ -58,6 +58,8 @@ class Config{
 
     public static function dev($arg = ['development', 'build']){
 
+        if(!is_array($arg)){ $arg = [$arg]; }
+        
         $store = Config::load();
 
         if(in_array($store["system/state"],$arg)){ return true; }

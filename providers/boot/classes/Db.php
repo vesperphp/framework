@@ -2,6 +2,7 @@
 
 namespace Framework;
 
+use Config\Config;
 use Sequel\Sequel;
 use Framework\SystemTables;
 

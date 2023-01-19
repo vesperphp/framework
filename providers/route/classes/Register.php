@@ -6,16 +6,16 @@ use Config\Config;
 
 class Register{
 
-    public $auth;
-    public $role;
-    public $armour; 
-    public $limit;
+    public $auth = [];
+    public $role = [];
+    public $armour = []; 
+    public $limit = [];
     public $route;
     public $path;
     public $controller;
     public $method;
-    public $model;
-    public $modelID;
+    public $model = 'none';
+    public $modelID = 0;
     public $type;
 
     public function auth($access = "all"){
@@ -91,6 +91,31 @@ class Register{
     public function store($type="GET"){
 
         $this->type = $type;
+
+
+        $a = [
+            'parent' => 0,
+            'path' => $this->path,
+            'redirect' => 'redirect',
+            'controller' => $this->controller.'@'.$this->method,
+            'model' => $this->model,
+            'id' => $this->modelID,
+            'middleware' => json_encode(
+                [
+                    'auth' => $this->auth,
+                    'role' => $this->role,
+                    'armour' => $this->armour,
+                    'limit' => $this->limit,
+                ]),
+            'created_at' => date("Y-m-d H:i:s"),
+            'updated_at' => date("Y-m-d H:i:s")
+
+        ];
+
+        $s = new Store;
+        $s->route('path', $a);
+        
+
         echo "<pre>";
         var_dump($this);
         echo "</pre>";

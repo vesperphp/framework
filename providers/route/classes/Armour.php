@@ -7,13 +7,14 @@ class Armour{
 
     public function call($controller, $method, $values = []){
           
+        $controller = "Middleware\\".$controller;
         
         if(!class_exists($controller)){
-            echo("Armour: Class ".$controller." does not exist.");
+            die("Armour: Class ".$controller." does not exist.");
         }
 
         if(!method_exists($controller, $method)){
-            echo("Armour: Method ".$method." within ".$controller." does not exist.");
+            die("Armour: Method ".$method." within ".$controller." does not exist.");
         }
 
         if(!is_array($values) && strlen($values)!=0){
@@ -24,15 +25,13 @@ class Armour{
             $values['param'] = [];
         }
 
+        $ar = new $controller;
 
-        echo "<pre>";
-        var_dump([[$controller, $method], $values]);
-        echo "</pre>";
+        $ar->$method($values);
 
+        var_dump($method);
+        return $ar;
 
-
-
-        call_user_func_array([$controller, $method], $values);
 
     }
 

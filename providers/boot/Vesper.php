@@ -30,6 +30,7 @@ class Vesper{
          SystemRoutes::registerOnRoot(); // register system based routes
 
          Route::load();
+         Route::find();
 
     }
 
@@ -46,12 +47,11 @@ class Vesper{
          /**
           * Playground!
           */
-/*
-          $t = new Test;
-          $t->pass('1');*/
+
           
-          $a = new Armour;
-          $a->call("Test", "pass",['1','2']);
+          //$a = new Armour;
+          //$a->call("Test", "pass",['1','2']);
+
         
     }
 

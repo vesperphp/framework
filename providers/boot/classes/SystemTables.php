@@ -37,12 +37,14 @@ class SystemTables{
             $r = new Tablier('_routes');
         
             $r->int('id')->primary();
+            $r->int('parent')->null();
         
-            $r->varchar('path',100)->notnull();
-            $r->varchar('slug',15)->notnull();
-            $r->varchar('controller',25)->notnull();
-            $r->varchar('model',25)->notnull();
-            $r->int('model_id',12)->notnull();
+            $r->varchar('path',200)->notnull()->unique();
+            $r->varchar('redirect',200)->null();
+            $r->varchar('controller',35)->default("Error@notfound");
+            $r->varchar('model',100);
+            $r->int('model_id',12);
+            $r->text('middleware');
         
             $r->timestamp('created_at')->default();
             $r->timestamp('updated_at')->onupdate();

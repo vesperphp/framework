@@ -3,7 +3,8 @@
 namespace Route;
 
 use Route\Register;
-use Route\Store;
+use Route\Visit;
+
 
 class Route{
 
@@ -34,11 +35,12 @@ class Route{
     public static function load(){
 
         require_once ROOTPATH. '/routes.php';
+
     }
 
     public static function find(){
 
-        $search = new Store;
+        $search = new Visit;
         return $search->process();
 
     }
@@ -48,4 +50,11 @@ class Route{
 /*
        $l = new Limit('test2', seconds, count);
        $l->check();
+*/
+
+/*
+        $a = new Armour;
+        $a->call("controller", "method","value array");
+        // middleware/controller
+
 */

@@ -5,10 +5,14 @@ namespace Route;
 use Config\Config;
 use Sequel\Sequel;
 
-class Store{
+class Visit{
 
-    public $path = '/';
+    public function __construct($a = []){
 
+        $this->request = Request::url();
+        $this->path = Config::get('app/url').$this->request;
+
+    }
 
     public function __destruct(){
 
@@ -32,36 +36,25 @@ class Store{
 
     }
 
-    public function create($mass = []){
+    public function create(){
 
         Sequel::insert("_routes")
-        ->mass($mass)
+        ->set("path", $this->path)
         ->do();
-
         
     }
 
-    public function update($mass){
+    public function process(){
 
-        Sequel::update("_routes")
-        ->where('path','=',$this->path)
-        ->mass($mass)
-        ->do();
+        if($this->exists()){
 
-    }
+            
 
-    public function route($path, $a){
-
-        $this->register = $a;
-        $this->path = $path;
-
-        if($this->exists()){ 
-
-            $this->update($a);
+            $this->update();
 
         }else{
 
-            $this->create($a);
+            $this->create();
 
         }
 
