@@ -5,6 +5,13 @@ namespace Route;
 use Config\Config;
 use Sequel\Sequel;
 
+/**
+ * Pulls all the info from the database
+ * regarding the requested route
+ * or stores a 404 notice and returns that 
+ * to the paint class.
+ */
+
 class Visit{
 
     public function __construct($a = []){
@@ -28,8 +35,7 @@ class Visit{
 
     public function exists(){
 
-        
-        $db = Sequel::select("_routes")->where("path","=",$this->path)->do();
+        $db = Sequel::select("_routes")->where("route","=",$this->request)->do();
         $this->object = $db;
         
         return $db;
@@ -39,7 +45,7 @@ class Visit{
     public function create(){
 
         Sequel::insert("_routes")
-        ->set("path", $this->path)
+        ->set("route", $this->route)
         ->do();
         
     }
@@ -48,13 +54,11 @@ class Visit{
 
         if($this->exists()){
 
-            
-
-            $this->update();
+            dump($this);
 
         }else{
 
-            $this->create();
+            echo "page not found, register the url anyway with 404";
 
         }
 

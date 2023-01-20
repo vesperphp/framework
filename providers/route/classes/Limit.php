@@ -5,6 +5,12 @@ namespace Route;
 use Config\Config;
 use service\Session;
 
+/**
+ * Limit keeps an eye on 
+ * call limits by users or
+ * api connections.
+ */
+
 class Limit{
 
     public $length;

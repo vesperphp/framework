@@ -2,6 +2,11 @@
 
 namespace Route;
 
+/**
+ * Armour calls the middleware from
+ * the middleware classes and puts
+ * them to use.
+ */
 
 class Armour{
 

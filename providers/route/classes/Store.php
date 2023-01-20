@@ -5,18 +5,24 @@ namespace Route;
 use Config\Config;
 use Sequel\Sequel;
 
+/**
+ * Store puts routing information
+ * in the database.. If it doesn't
+ * exist already.
+ */
+
 class Store{
 
-    public $path = '/';
+    public $route = '/';
 
 
     public function __destruct(){
 
-        echo "<pre>";
+        /*echo "<pre>";
 
         var_dump($this);
 
-        echo "</pre>";
+        echo "</pre>";*/
 
         // keep
 
@@ -24,8 +30,7 @@ class Store{
 
     public function exists(){
 
-        
-        $db = Sequel::select("_routes")->where("path","=",$this->path)->do();
+        $db = Sequel::select("_routes")->where("route","=",$this->route)->do();
         $this->object = $db;
         
         return $db;
@@ -43,17 +48,20 @@ class Store{
 
     public function update($mass){
 
+        echo "update";
         Sequel::update("_routes")
-        ->where('path','=',$this->path)
+        ->where('route','=',$this->route)
         ->mass($mass)
         ->do();
 
+        var_dump($this->route);
+
     }
 
-    public function route($path, $a){
+    public function route($route, $a){
 
         $this->register = $a;
-        $this->path = $path;
+        $this->route = $route;
 
         if($this->exists()){ 
 

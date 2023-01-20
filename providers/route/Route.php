@@ -5,6 +5,12 @@ namespace Route;
 use Route\Register;
 use Route\Visit;
 
+/**
+ * Route handles sorting via the
+ * register class and routes.php
+ * and pulling the route information
+ * out of the database on request.
+ */
 
 class Route{
 
@@ -14,19 +20,7 @@ class Route{
         $new = new Register;
 
         $new->route($route);
-
-        $mvc = explode("@", $at);
-
-        if(is_array($mvc) && count($mvc)==2){
-
-            $new->controller($mvc[0]);
-            $new->method($mvc[1]);
-
-        }else{
-
-            // Keep
-
-        }
+        $new->controller($at);
 
         return $new;
 
@@ -56,5 +50,9 @@ class Route{
         $a = new Armour;
         $a->call("controller", "method","value array");
         // middleware/controller
+
+
+        $a = new Auth;
+        $a->session(); // returns true/false (or dies?)
 
 */
