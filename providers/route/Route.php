@@ -2,8 +2,10 @@
 
 namespace Route;
 
-use Route\Register;
 use Route\Visit;
+use Route\Register;
+use Middleware\Auth;
+use service\Session;
 
 /**
  * Route handles sorting via the
@@ -38,6 +40,72 @@ class Route{
         return $search->process();
 
     }
+
+
+    public static function middleware($route){
+
+
+        if(!isset($route['middleware'])){
+
+            Session::set('_keep', ['middleware' => "middleware string not found"]);
+            return false;
+
+        }
+
+        $mw = json_decode($route['middleware']);
+
+        //var_dump($mw);
+        if(!is_object($mw)){
+
+            Session::set('_keep', ['middleware' => "Middleware string not an array"]);
+            return false;
+
+        }
+
+        
+
+        foreach($mw as $type => $content){
+
+            // case!
+            $type = explode("@", $type);
+            $controller = "Middleware\\".ucfirst($type[0]);
+            $method = $type[1];
+
+            if(!class_exists($controller)){ 
+            
+                echo "class ".$controller." does not exist"; // keep
+                return false;
+            
+            }
+
+            /*if(!class_exists($controller)){ 
+            
+                echo "class ".$controller." does not exist"; // keep
+                return false;
+            
+            }*/
+
+
+            $ar = new $controller;
+    
+            $ar->$method($content);
+    
+            return true;
+
+            
+            // if any middleware doesnt pass, return false
+
+        }
+
+        Session::set('_keep', ['middleware' => "Middleware is functional"]);
+        
+        return true;
+        
+        
+
+    }
+
+    
 
 }
 

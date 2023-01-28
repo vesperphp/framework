@@ -15,11 +15,13 @@ class Armour{
         $controller = "Middleware\\".$controller;
         
         if(!class_exists($controller)){
-            die("Armour: Class ".$controller." does not exist.");
+            die("Armour: Class ".$controller." does not exist."); // keep
+            return false;
         }
 
         if(!method_exists($controller, $method)){
-            die("Armour: Method ".$method." within ".$controller." does not exist.");
+            die("Armour: Method ".$method." within ".$controller." does not exist."); // keep
+            return false;
         }
 
         if(!is_array($values) && strlen($values)!=0){
@@ -34,8 +36,7 @@ class Armour{
 
         $ar->$method($values);
 
-        var_dump($method);
-        return $ar;
+        return true;
 
 
     }

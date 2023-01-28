@@ -2,7 +2,9 @@
 
 namespace Route;
 
+use Keep\Keep;
 use Config\Config;
+use Route\Request;
 use Sequel\Sequel;
 
 /**
@@ -14,6 +16,19 @@ use Sequel\Sequel;
 
 class Visit{
 
+    public $auth = [];
+    public $role = [];
+    public $armour = []; 
+    public $limit = [];
+    public $route = '/';
+    public $redirect = 'false';
+    public $header = 404;
+    public $path = '/';
+    public $controller = 'Error@notFound';
+    public $model = 'none';
+    public $modelID = 0;
+    public $type = 'GET';
+
     public function __construct($a = []){
 
         $this->request = Request::url();
@@ -22,12 +37,12 @@ class Visit{
     }
 
     public function __destruct(){
-
+/*
         echo "<pre>";
 
         var_dump($this);
 
-        echo "</pre>";
+        echo "</pre>";*/
 
         // keep
 
@@ -42,30 +57,64 @@ class Visit{
 
     }
 
-    public function create(){
+    public function create($mass = []){
 
         Sequel::insert("_routes")
-        ->set("route", $this->route)
+        ->mass($mass)
         ->do();
-        
+   
     }
 
     public function process(){
 
         if($this->exists()){
 
-            dump($this);
+            $d = $this->object['results'][0];
+
+            $a = [
+                'parent' => 0,
+                'path' => $this->path,
+                'route' => $this->request,
+                'httpcode' => $d['httpcode'],
+                'redirect' => $d['redirect'],
+                'controller' => $d['controller'],
+                'model' => $d['model'],
+                'model_id' => $d['model_id'],
+                'middleware' => $d['middleware']
+    
+            ];
 
         }else{
 
-            echo "page not found, register the url anyway with 404";
+            
 
+            $a = [
+                'parent' => 0,
+                'path' => $this->path,
+                'route' => $this->request,
+                'httpcode' => 404,
+                'redirect' => $this->redirect,
+                'controller' => $this->controller,
+                'model' => $this->model,
+                'model_id' => $this->modelID,
+                'middleware' => json_encode(
+                    [
+                        'auth' => $this->auth,
+                        'role' => $this->role,
+                        'armour' => $this->armour,
+                        'limit' => $this->limit,
+                    ])
+    
+            ];
+
+            $this->create($a);
+
+            // keep
         }
 
-        // internal analytics can run here
-        // keep
+        Keep::store('route', $a);
 
-        return $this;
+        return $a;
 
     }
 

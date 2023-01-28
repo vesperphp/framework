@@ -3,6 +3,7 @@
 namespace Framework;
 
 use Keep\Keep;
+use Route\Paint;
 use Route\Route;
 use Route\Armour;
 use Config\Config;
@@ -26,23 +27,19 @@ class Vesper{
          */
 
          Config::load(); // Load the config file
-         
-         SystemRoutes::registerOnRoot(); // register system based routes
 
-         Route::load();
-         Route::find();
+         SystemRoutes::registerOnRoot(); // register system based routes
+         Route::load(); // run routing file
+         
 
     }
 
     public static function paint(){
 
-        /**
-         * Run frontier
-         * paint the page
-         */
 
+        
 
-
+        Paint::front();
 
          /**
           * Playground!
@@ -66,9 +63,7 @@ class Vesper{
  
 
         if(Config::dev()){   
-            echo "<pre>Tailgate:";  
-            var_dump( Keep::tailgate() );
-            echo "</pre>:end;";
+            Keep::tailgate();
         }
 
         // wipe system/session

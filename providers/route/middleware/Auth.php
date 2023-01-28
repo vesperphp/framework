@@ -1,6 +1,6 @@
 <?php
 
-namespace Route;
+namespace Middleware;
 
 use Config\Config;
 use service\Session;
@@ -12,11 +12,16 @@ use service\Session;
 
 class Auth{
 
+    public function __construct(){
+        echo "run auth";
+    }
+
     // check if someone is logged in
 
     public function session(){
 
-        echo "check if someone is logged in";
+        echo "check if someone is logged in"; // keep
+        return true;
 
     }
 
@@ -24,13 +29,15 @@ class Auth{
 
     public static function role(){
 
-        echo "return a users role";
+        echo "return a users role"; // keep
+        return true;
 
     }
 
     public static function loggedin(){
 
-        echo "check if user is logged in";
+        echo "check if user is logged in"; // keep
+        return true;
 
     }
 

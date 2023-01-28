@@ -13,12 +13,9 @@ use Config\Config;
 
 class Register{
 
-    public $auth = [];
-    public $role = [];
-    public $armour = []; 
-    public $limit = [];
+    public $middleware = ['Auth@session'=>NULL]; 
     public $route = '/';
-    public $redirect = '';
+    public $redirect = 'false';
     public $header = 200;
     public $path = '/';
     public $controller;
@@ -26,20 +23,20 @@ class Register{
     public $modelID = 0;
     public $type = 'GET';
 
-    public function auth($access = "all"){
+    public function auth($access = NULL){
 
 
         // is somebody logged in?
-        $this->auth = $access;
+        $this->middleware['Auth@session'] = $access;
 
         return $this;
 
     }
 
-    public function armour($armour = ''){
+    public function armour($armour, $value = ''){
 
         // custom authentication controllers insert
-        $this->armour = $armour;
+        $this->middleware['Armour@call'][] = [$armour, $value];
 
         return $this;
 
@@ -48,7 +45,7 @@ class Register{
     public function role($role = ''){
 
         // check someone's role
-        $this->role = $role;
+        $this->middleware['Auth@role'] = $role;
         return $this;
 
     }
@@ -72,7 +69,7 @@ class Register{
     public function limit($amount = false, $time = false, $group = 'vesper'){
 
         // limit the amount of loads (get from session)
-        $this->limit = [$amount, $time, $group];
+        $this->middleware['Limit@check'] = [$amount, $time, $group];
 
         return $this;
 
@@ -114,26 +111,22 @@ class Register{
             'parent' => 0,
             'path' => $this->path,
             'route' => $this->route,
-            'redirect' => 'redirect',
+            'httpcode' => 200,
+            'redirect' => $this->redirect,
             'controller' => $this->controller,
             'model' => $this->model,
             'model_id' => $this->modelID,
-            'middleware' => json_encode(
-                [
-                    'auth' => $this->auth,
-                    'role' => $this->role,
-                    'armour' => $this->armour,
-                    'limit' => $this->limit,
-                ])
+            'middleware' => json_encode($this->middleware)
 
         ];
+
 
         $s = new Store;
         $s->route($this->route, $a);
         
-
-        /*echo "<pre>";
-        var_dump($this);
+/*
+        echo "<pre>";
+        var_dump($this->middleware);
         echo "</pre>";*/
 
     }

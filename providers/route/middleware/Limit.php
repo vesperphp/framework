@@ -52,9 +52,11 @@ class Limit{
                 echo "<pre>";
                 var_dump($this);
                 echo "</pre>";
-                die("Maximum calls reached for ".$this->group );
+                die("Maximum calls reached for ".$this->group ); // keep
+                return false;
             }else{
-                die("Maximum calls reached. Try again later." );
+                die("Maximum calls reached. Try again later." ); // keep
+                return false;
             }
             
 

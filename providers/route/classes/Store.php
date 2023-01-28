@@ -48,13 +48,11 @@ class Store{
 
     public function update($mass){
 
-        echo "update";
+        //echo "update";
         Sequel::update("_routes")
         ->where('route','=',$this->route)
         ->mass($mass)
         ->do();
-
-        var_dump($this->route);
 
     }
 
@@ -68,6 +66,7 @@ class Store{
             $this->update($a);
 
         }else{
+
 
             $this->create($a);
 
